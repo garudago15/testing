@@ -4,7 +4,7 @@
  */
 
 #include "mbed.h"
-#include "../KRAI_library/JoystickPS3/JoystickPS3.h"
+#include "../../KRAI_library/JoystickPS3/JoystickPS3.h"
 
 // -------------- SETUP LED --------------
 DigitalOut led1(LED1);
