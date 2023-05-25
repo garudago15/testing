@@ -15,7 +15,7 @@ add_subdirectory(${MBED_PATH} ${CMAKE_CURRENT_BINARY_DIR}/mbed-os)
 
 add_executable(${APP_TARGET}
     main.cpp
-    ../../KRAI_library/JoystickPS3/JoystickPS3.cpp
+    ../KRAI_library/JoystickPS3/JoystickPS3.cpp
 )
 
 target_link_libraries(${APP_TARGET} mbed-os)
