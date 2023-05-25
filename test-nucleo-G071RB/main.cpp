@@ -9,7 +9,7 @@
 // Blinking rate in milliseconds
 #define BLINKING_RATE     500ms
 
-
+  
 int main()
 {
     // Initialise the digital pin LED1 as an output

@@ -42,7 +42,11 @@ int main()
         ps3.olah_data();
         if (ps3.readable())
         {
-            printf("READ RX : %d RY : %d R1 : %d", ps3.getRX(), ps3.getRY(), ps3.getR1());
+            printf("RX : %d RY : %d LX : %d LY : %D ", ps3.getRX(), ps3.getRY(), ps3.getLX(), ps3.getLY());
+            printf("R1 : %d R2 : %d L1 : %d L2 : %d ", ps3.getR1(), ps3.getR2(), ps3.getL1(), ps3.getL2());
+            printf("Kotak : %d Silang : %d Lingkaran : %d Segitiga : %d ", ps3.getKotak(), ps3.getSilang(), ps3.getLingkaran(), ps3.getSegitiga());
+            printf("Up : %d Left : %d Right : %d Down : %d ", ps3.getButtonUp(), ps3.getButtonLeft(), ps3.getButtonRight(), ps3.getButtonDown());
+            printf("Start : %d Select : %d ", ps3.getStart(), ps3.getSelect());
 
             // PRINT JIKA BACA DATA
             if(ps3.baca_data()){
