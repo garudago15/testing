@@ -40,25 +40,30 @@ Motor motor(PWM, FWD, REV);
 JoystickPS3 ps3(tx, rx);
 pidLo PID(KP, KI, KD, TS, MAXOUT, VFF, RPF, MAXIN);
 
+// Fungsi Millis dalam ms
 int millis_ms(){
     return us_ticker_read() * 1000;
 }
 
-float currentPulse, currentSudut;
-float prevPulse, prevSudut;
-float speedPulse, speedSudut; // Kecepatan sudut (derajat/s) dan kecepatan pulse (pulse/s)
-float currentRPM; // RPM sekarang
+
+// Setup Variabel PID
 float targetRPM = 0;
 float pwm;
 
-int now; // Waktu sekarang (ms)
-int timer1 = millis_ms(); //ms
-int timer2 = millis_ms(); //ms
+// Setup Variabel
+int now; // time
+float speedRPM;
+float currentSudut, speedSudut; // Kecepatan sudut (derajat/s) dan kecepatan pulse (pulse/s)
+float speedPulse, tmpPulse;
+int tmp_sudut;
 
 int main() {
     ps3.setup();
-    prevPulse = 0;
-    motor.speed(0.5);
+
+    // Setup Variabel Untuk Sampling Waktu
+    now = millis_ms();
+    tmpPulse = enc.getPulses();
+    currentSudut = (enc.getPulses() * 360 / PPR);;
 
     while(true){
         // -- PS3 Controller Loop --
@@ -76,37 +81,19 @@ int main() {
         }
 
 
-        // get current data
-        now = millis_ms();
-        currentPulse = enc.getPulses();
-        // currentSudut = currentPulse * 360 / PPR;
-
-        if(now - timer1 >= TS){
-            // get current speed
-            speedPulse = (prevPulse - currentPulse) / TS; // pulse / ms
-            // speedSudut = (prevSudut - currentSudut) / TS; // derajat / ms
-            // convert satuan
-            speedPulse = speedPulse * 1000; // pulse/s
-            // speedSudut = speedSudut * 1000; // derajat/s
-
-            currentRPM = speedPulse / PPR * 60; //rotation per minute
-
-            // update prevSudut dan prevPulse
-            // prevSudut = currentSudut;
-            prevPulse = currentPulse;
-
-            timer1 = millis_ms();
+        // OLAH DATA ENCORDER
+        while (millis_ms() -  now > TS)
+        {
+            speedPulse = (float(enc.getPulses() - tmpPulse)/TS);
+            tmpPulse = enc.getPulses();
+            now = millis_ms();
         }
-        pwm = PID.createpwm(targetRPM, currentRPM, 0.5);
-        motor.speed(pwm);
 
-        if(now - timer2 >= 100){
-            // printf("Sudut: %*d", 4, currentSudut);
-            // printf(" | RPM: %*d.2f", 5, currentRPM);
-            printf("Pulse: %d | RPM : %.2f | TargetRPM : %.2f \n", currentPulse, currentRPM, targetRPM);
-            
-            timer2 = millis_ms();
-        }
+        // Olah data kecepatan RPM dan sudut
+        speedRPM = speedPulse / PPR;
+        speedSudut = speedPulse * 360 / PPR;
+
+        printf("Pulse : %d Millis (ms) : %d Pulse Speed : %.2f Speed RPM : %.2f Speed Sudut : %.2f Target RPM : %d \n", enc.getPulses(), millis_ms(),speedPulse, speedRPM, speedSudut, targetRPM);
 
     }
 }
