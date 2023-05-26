@@ -22,7 +22,7 @@ FileHandle *mbed::mbed_override_console(int fd)
 #define tx PC_10
 #define rx PC_11
 
-#define KP 0.015
+#define KP 0.0006
 #define KI 0.001
 #define KD 0
 #define TS 50 // Time Sampling (s)
@@ -42,13 +42,13 @@ pidLo PID(KP, KI, KD, TS, MAXOUT, VFF, RPF, MAXIN);
 
 // Fungsi Millis dalam ms
 int millis_ms(){
-    return us_ticker_read() * 1000;
+    return us_ticker_read() / 1000;
 }
 
 
 // Setup Variabel PID
-int targetRPM;
-float pwm;
+float targetRPM;
+float pwm; // Untuk write PWM ke motor
 
 // -------------------------------------------------------------------
 
@@ -74,13 +74,13 @@ int main() {
         ps3.baca_data();
 
         if(ps3.getKotak()){
-            targetRPM = 100;
+            targetRPM = 500;
         }
         if(ps3.getLingkaran()){
-            targetRPM = 200;
+            targetRPM = 700;
         }
         if(ps3.getSegitiga()){
-            targetRPM = 300;
+            targetRPM = 900;
         }
 
 
@@ -96,9 +96,12 @@ int main() {
         speedRPM = speedPulse / PPR * 60; // pulse/s / Pulse/rotation = rotation/s
         speedSudut = speedPulse * 360 / PPR;
 
-        printf("Triangle: %d ", ps3.getSegitiga());
-        printf("Pulse : %d Millis (ms) : %d Pulse Speed : %.2f Speed RPM : %.2f Speed Sudut : %.2f Target RPM : %d \n", enc.getPulses(), millis_ms(),speedPulse, speedRPM, speedSudut, targetRPM);
-        motor.speed(0.5);
+        //printf("Triangle: %d ", ps3.getSegitiga());
+        //printf("Pulse : %d Millis (ms) : %d Pulse Speed : %.2f Speed RPM : %.2f Speed Sudut : %.2f Target RPM : %.2f \n", enc.getPulses(), millis_ms(),speedPulse, speedRPM, speedSudut, targetRPM);
+        printf("RPM: %.2f TargetRPM: %.2f \n", speedRPM, targetRPM);
+
+        pwm = PID.createpwm(targetRPM, speedRPM, 0.5);
+        motor.speed(pwm);
 
     }
 }
