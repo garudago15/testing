@@ -50,20 +50,23 @@ int millis_ms(){
 int targetRPM;
 float pwm;
 
-// Setup Variabel
+// -------------------------------------------------------------------
+
 int now; // time
+
 float speedRPM;
-float currentSudut, speedSudut; // Kecepatan sudut (derajat/s) dan kecepatan pulse (pulse/s)
+float currentSudut, speedSudut;
 float speedPulse, tmpPulse;
 int tmp_sudut;
+
+// ------------------------------------------------------------------
 
 int main() {
     ps3.setup();
 
-    // Setup Variabel Untuk Sampling Waktu
     now = millis_ms();
     tmpPulse = enc.getPulses();
-    currentSudut = (enc.getPulses() * 360 / PPR);;
+    currentSudut = (enc.getPulses() * 360 / PPR);
 
     while(true){
         // -- PS3 Controller Loop --
@@ -84,13 +87,13 @@ int main() {
         // OLAH DATA ENCORDER
         while (millis_ms() -  now > TS)
         {
-            speedPulse = (float(enc.getPulses() - tmpPulse)/TS);
-            tmpPulse = enc.getPulses();
-            now = millis_ms();
+            speedPulse = (float(enc.getPulses() - tmpPulse)/TS) * 1000; // pulse / s
+            tmpPulse = enc.getPulses(); //pulse
+            now = millis_ms(); // ms
         }
 
         // Olah data kecepatan RPM dan sudut
-        speedRPM = speedPulse / PPR;
+        speedRPM = speedPulse / PPR * 60; // pulse/s / Pulse/rotation = rotation/s
         speedSudut = speedPulse * 360 / PPR;
 
         printf("Triangle: %d ", ps3.getSegitiga());
