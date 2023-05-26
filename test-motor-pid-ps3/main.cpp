@@ -25,7 +25,7 @@ FileHandle *mbed::mbed_override_console(int fd)
 #define KP 0.015
 #define KI 0.001
 #define KD 0
-#define TS 0.005 // Time Sampling (s)
+#define TS 50 // Time Sampling (s)
 
 #define MAXOUT 1
 #define VFF 0
@@ -47,7 +47,7 @@ int millis_ms(){
 
 
 // Setup Variabel PID
-float targetRPM = 0;
+int targetRPM;
 float pwm;
 
 // Setup Variabel
@@ -93,7 +93,9 @@ int main() {
         speedRPM = speedPulse / PPR;
         speedSudut = speedPulse * 360 / PPR;
 
+        printf("Triangle: %d ", ps3.getSegitiga());
         printf("Pulse : %d Millis (ms) : %d Pulse Speed : %.2f Speed RPM : %.2f Speed Sudut : %.2f Target RPM : %d \n", enc.getPulses(), millis_ms(),speedPulse, speedRPM, speedSudut, targetRPM);
+        motor.speed(0.5);
 
     }
 }
