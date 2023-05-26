@@ -1,6 +1,6 @@
 #include "mbed.h"
-#include "../../KRAI_library/Motor/Motor.h"
-#include "../../KRAI_library/encoderKRAI/encoderKRAI.h"
+#include "../KRAI_library/Motor/Motor.h"
+#include "../KRAI_library/encoderKRAI/encoderKRAI.h"
 
 DigitalOut led1(LED1);
 // DigitalOut led2(LED2);
@@ -14,13 +14,13 @@ FileHandle *mbed::mbed_override_console(int fd)
 
 // ---------------------------------------------------------------------
 
-#define PWM PB_8
+#define PWM PA_10
 #define FWD PB_3
-#define REV PA_14
+#define REV PB_5
 
-#define CHA PA_13
-#define CHB PA_12
-#define PPR 537.6
+#define CHA PB_4
+#define CHB PB_14
+#define PPR 105
 
 // --------------------------------------------------------------------
 
@@ -55,17 +55,17 @@ int main() {
 
     while (true) {
 
-        motor.speed(0.4);
+        motor.speed(1);
         // Looping
 
         while (millis_ms() -  now > TS)
         {
-            speedPulse = (float(enc.getPulses() - tmpPulse)/TS);
-            tmpPulse = enc.getPulses();
-            now = millis_ms();
+            speedPulse = (float(enc.getPulses() - tmpPulse)/TS) * 1000; // pulse / s
+            tmpPulse = enc.getPulses(); //pulse
+            now = millis_ms(); // ms
         }
 
-        speedRPM = speedPulse / PPR;
+        speedRPM = speedPulse / PPR * 60; // pulse/s / Pulse/rotation = rotation/s
         speedSudut = speedPulse * 360 / PPR;
         printf("Pulse : %d Millis (ms) : %d Pulse Speed : %.2f Speed RPM : %.2f Speed Sudut : %.2f \n", enc.getPulses(), millis_ms(),speedPulse, speedRPM, speedSudut);
         
