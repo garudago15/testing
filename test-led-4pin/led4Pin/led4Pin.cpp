@@ -48,3 +48,7 @@ void LED4::setColor(string strColor){
     }
     
 }
+
+void LED4::turnOff(){
+    setRGB(0, 0, 0);
+}

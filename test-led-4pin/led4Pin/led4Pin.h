@@ -42,6 +42,12 @@ public:
     */
     void setColor(string strColor);
 
+    /*
+    FUNGSI turnOff();
+    Mematikan LED
+    */
+    void turnOff();
+
 protected:
     PwmOut _red;
     PwmOut _green;
