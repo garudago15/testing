@@ -1,0 +1,7 @@
+Change Component Designator: OldDesignator=Fuse? NewDesignator=Fuse
+Change Component Designator: OldDesignator=led? NewDesignator=LED
+Change Component Designator: OldDesignator=Power? NewDesignator=Power
+Change Component Designator: OldDesignator=R? NewDesignator=R
+Change Component Designator: OldDesignator=RB NewDesignator=RB 2.2K
+Change Net Name : Old Net Name=Netled?_1 New Net Name=NetLED_1
+Added Room: Name=Skema
